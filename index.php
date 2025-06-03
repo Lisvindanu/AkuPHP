@@ -1,407 +1,451 @@
 <?php
 session_start();
-// Menghubungkan dengan file php lainya
 require 'php/functions.php';
-//melakukan query
-$items = query("SELECT * FROM items");
+
+// Ambil data untuk homepage
+$featuredServices = query("SELECT * FROM services WHERE status = 'active' LIMIT 4");
+$featuredProjects = query("SELECT p.*, s.title as service_title FROM projects p 
+                          LEFT JOIN services s ON p.service_id = s.id 
+                          WHERE p.featured = 1 AND p.status = 'completed' 
+                          ORDER BY p.completion_date DESC LIMIT 6");
+$featuredTestimonials = query("SELECT t.*, p.title as project_title FROM testimonials t 
+                              LEFT JOIN projects p ON t.project_id = p.id 
+                              WHERE t.featured = 1 AND t.status = 'active' LIMIT 3");
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" href="assets/icon/—Pngtree—samurai mask japanese general warrior_6570760.png">
-  <title>wibu</title>
-  <!-- css bootsrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="assets/icon/anaphygon-logo.png">
+    <title>Anaphygon Retro - Creative Design Studio</title>
+    
+    <!-- CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100" rel="stylesheet" />
+    
+    <!-- Custom JS -->
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
 
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100" rel="stylesheet" />
-  <!-- cssku -->
-  <link rel="stylesheet" href="./assets/css/navbwah.css" />
-  <link rel="stylesheet" href="./assets/css/slider.css" />
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+        // Navbar background change on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(44, 62, 80, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(44, 62, 80, 0.95)';
+            }
+        });
+    </script>
+</body>
 
-  <!-- script font awesome kit-->
-  <script src="https://kit.fontawesome.com/e18581a144.js" crossorigin="anonymous"></script>
+</html> CSS -->
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/navbar.css" />
+    
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/e18581a144.js" crossorigin="anonymous"></script>
 
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+    <style>
+        :root {
+            --retro-orange: #FF6B35;
+            --retro-pink: #F7931E;
+            --retro-purple: #9B59B6;
+            --retro-blue: #3498DB;
+            --retro-dark: #2C3E50;
+            --retro-light: #ECF0F1;
+        }
 
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, var(--retro-dark) 0%, var(--retro-purple) 100%);
+            color: var(--retro-light);
+        }
 
-  <style>
-    .grid-wrapper {
-      margin-top: 200px;
-    }
+        .hero-section {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('./assets/img/retro-hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .image-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-gap: 10px;
-    }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 107, 53, 0.1) 2px,
+                rgba(255, 107, 53, 0.1) 4px
+            );
+            animation: scan 2s linear infinite;
+        }
 
-    .image-item img {
-      width: 100%;
-      height: auto;
-    }
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
 
-    @media only screen and (max-width: 767px) {
-      .image-grid {
-        grid-template-columns: repeat(2, 4fr);
-      }
-    }
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--retro-orange);
+            text-shadow: 3px 3px 0px var(--retro-pink);
+            margin-bottom: 2rem;
+        }
 
-    .popup-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--retro-light);
+            margin-bottom: 3rem;
+        }
 
-    .popup-container.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
+        .btn-retro {
+            background: linear-gradient(45deg, var(--retro-orange), var(--retro-pink));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 0;
+            box-shadow: 5px 5px 0px var(--retro-dark);
+            transition: all 0.3s ease;
+        }
 
-    .popup-image {
-      max-width: 80%;
-      max-height: 80%;
-    }
+        .btn-retro:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px var(--retro-dark);
+            color: white;
+        }
 
-    .popup-close-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 5px;
-      background-color: transparent;
-      border: none;
-      font-size: 24px;
-      color: #fff;
-      cursor: pointer;
-    }
+        .section-title {
+            font-size: 3rem;
+            color: var(--retro-orange);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
 
-    .dropdown-menu {
-      width: 200px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--retro-pink);
+        }
 
+        .service-card {
+            background: var(--retro-dark);
+            border: 3px solid var(--retro-orange);
+            border-radius: 0;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .dropdown-menu li {
-      position: relative;
-    }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
 
-    .dropdown-menu li:hover>.dropdown-menu {
-      display: block;
-    }
+        .service-card:hover::before {
+            left: 100%;
+        }
 
-    .dropdown-menu li:hover>.dropdown-menu {
-      top: auto;
-      bottom: 0;
-      left: 100%;
-    }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
 
+        .service-icon {
+            font-size: 3rem;
+            color: var(--retro-pink);
+            margin-bottom: 1rem;
+        }
 
+        .project-card {
+            background: var(--retro-light);
+            color: var(--retro-dark);
+            border-radius: 0;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
 
+        .project-card:hover {
+            transform: scale(1.05);
+        }
 
-    @media (min-width: 992px) {
-      a nav-link .hoverdisini {
-        display: none !important;
-      }
-    }
+        .project-image {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+        }
 
-    @media (max-width: 991px) {
-      .nav-item.dropdown:hover .dropdown-menu-kategori {
-        display: block !important;
-      }
-    }
-  </style>
+        .testimonial-card {
+            background: var(--retro-dark);
+            border-left: 5px solid var(--retro-orange);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
 
+        .testimonial-card::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--retro-pink);
+            position: absolute;
+            top: -10px;
+            left: 20px;
+        }
+
+        .rating {
+            color: var(--retro-pink);
+        }
+
+        .contact-section {
+            background: var(--retro-dark);
+            padding: 5rem 0;
+        }
+
+        .form-control {
+            background: var(--retro-light);
+            border: 2px solid var(--retro-orange);
+            border-radius: 0;
+            color: var(--retro-dark);
+        }
+
+        .form-control:focus {
+            background: var(--retro-light);
+            border-color: var(--retro-pink);
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 53, 0.25);
+            color: var(--retro-dark);
+        }
+
+        .navbar-custom {
+            background: rgba(44, 62, 80, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand img {
+            height: 50px;
+        }
+
+        .nav-link {
+            color: var(--retro-light) !important;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .nav-link:hover {
+            color: var(--retro-orange) !important;
+        }
+    </style>
 </head>
 
 <body>
-  <!-- navbar -->
+    <!-- Navbar -->
+    <?php include('./includes/navbar.php') ?>
 
-
-  <?php include('./tambahanlain/navatas.php') ?>
-  <style>
-    <?php include('./assets/css/slider.css') ?>
-  </style>
-
-  <!-- navbar end -->
-
-
-  <!-- jumbotron show item -->
-  <!-- <section class="show1 " style="margin-top: 30px !important;background: #FCBC94;">
-    <div class="container mt-3 py-2">
-      <div class="row">
-        <div class="col-lg-6 px-4 py-5 d-flex mobile">
-          <div class="px-4 py-5 mobile tom">
-            <img style="width: 95%" src="./assets/img/2.png" alt="" />
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="px-4 py-5">
-            <img src="./assets/img/hero1.jpeg" class="py-5 w-100 responsivewidthfull" />
-          </div>
-          <div class="px-4 py-1">
-
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aut
-              culpa, quisquam iure voluptatem rem sint, aspernatur quo non
-              cupiditate eos excepturi explicabo ipsam optio facere saepe
-              similique dolores aliquid reprehenderit?
-            </p>
-          </div>
-          <div class="px4 py-1 promo">
-            <img src="./assets/img/adidasMU.jpg" alt="" style="width: 50%" />
-            <button style="margin-left: 100px; width: 100px" type="button" class="btn btn-outline-danger loginhp">
-              BUY
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-  <section class="show1" style="margin-top: 70px !important; background: #FCBC94;">
-    <div class="container mt-5 py-3">
-      <div class="image-grid">
-        <div class="image-item">
-          <a href="php/kategori.php?kategori=pria"><img src="./assets/img/MENSWEAR_auto_x2.png" alt="" /></a>
-        </div>
-        <div class="image-item">
-          <a href="php/kategori.php?kategori=wanita"><img src="./assets/img/WOMENSWEAR_auto_x2.png" alt="" /></a>
-        </div>
-      </div>
-      <div class="row mt-1">
-        <div class="col-6 col-md-3 mt-3 ">
-          <div class="image-item">
-            <a href="php/kategori.php?kategori=all"><img src="./assets/img/ALL.jpg" alt="" /></a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 mt-3">
-          <div class="image-item">
-            <a href="php/kategori.php?kategori=baju"><img src="./assets/img/TOPWEARS.png" alt="" /></a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 mt-3 ">
-          <div class="image-item">
-            <a href="php/kategori.php?kategori=celana"><img src="./assets/img/BOTTOMS1.png" alt="" /></a>
-          </div>
-        </div>
-        <div class="col-6 col-md-3 mt-3">
-          <div class="image-item">
-            <a href="php/kategori.php?kategori=aksesoris"><img src="./assets/img/accessories.png" alt="" /></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- jumbotron end -->
-  <section class="aboutPromo" style="background-color: #FCBC94;">
-    <div class="container-fluid
-    ">
-      <div class="row">
-        <div class="col-lg-12 py-3 my-3">
-          <!-- carousel slide tampil -->
-          <div id="carouselExampleIndicators" class="carousel slide">
-            <div class="carousel-inner mx-auto">
-              <div class="carousel-item active">
-                <img src="./assets/img/jpun.png" alt="" class="d-block w-100 mx-auto" />
-              </div>
-              <div class="carousel-item">
-                <img src="./assets/img/harajukubanner.png" alt="" class="d-block w-100 mx-auto" />
-              </div>
-              <div class="carousel-item">
-                <img src="./assets/img/harajukuben.png" alt="" class="d-block w-100 mx-auto" />
-              </div>
-              <div class="carousel-item">
-                <img src="./assets/img/bagus.png" alt="" class="d-block w-100 mx-auto" />
-              </div>
-            </div>
-
-            <!-- carousel tampil button -->
-
-            <div class="carousel-indicators py-5 turun">
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active thumbnail" aria-current="true" aria-label="Slide 1">
-                <img src="./assets/img/jpun.png" class="d-block w-100" alt="..." />
-              </button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" class="thumbnail" aria-label="Slide 2">
-                <img src="./assets/img/harajukubanner.png" class="d-block w-100" alt="..." />
-              </button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" class="thumbnail" aria-label="Slide 3">
-                <img src="./assets/img/harajukuben.png" class="d-block w-100" alt="..." />
-              </button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" class="thumbnail" aria-label="Slide 4">
-                <img src="./assets/img/bagus.png" class="d-block w-100" alt="..." />
-              </button>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- jumbotron show item end -->
-  <!-- card promo item  start-->
-
-
-
-
-  <!-- <section id="cardkatalog" style="background-color:#FCBC94; padding-top:20px">
-    <div class="container">
-      <div class="row">
-        <?php foreach ($items as $brg) : ?>
-          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 gambarnaik">
-            <a class="text-decoration-none" href="./php/detailitem.php?id=<?= $brg["id"] ?>">
-              <div class="card p-1" style="width: 20rem; background:#D5A3B8;">
-                <img src="./assets/img/<?= $brg['gambar'] ?>" alt="" style="width: 100%; height: 400px;" />
-                <div class="card-body">
-                  <h4 style="color: white;">
-                    <?= $brg['nama'] ?> <br />
-                    <br />
-                    <span style="font-size: 13px; color:white;"><?= $brg['detail']; ?></span>
-                  </h4>
-                  <p style="color:#F96204 !important;">Produk Terbaru</p>
-                  <div class="card-fasilitas">
-                    <h4 style="color: white;">Rp.<?= $brg['harga'] ?></h4>
-                    <p style="color:#F96204 !important;">&nbsp; Diskon</p>
-                  </div>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="hero-title">ANAPHYGON<br>RETRO</h1>
+                    <p class="hero-subtitle">Creative Design Studio Specializing in Retro & Vintage Aesthetics</p>
+                    <p class="lead mb-4">Kami menciptakan identitas visual yang memorable dengan sentuhan nostalgia dan inovasi modern. Dari web design hingga brand identity, kami menghadirkan karya yang timeless.</p>
+                    <a href="#services" class="btn btn-retro me-3">Our Services</a>
+                    <a href="#contact" class="btn btn-outline-light btn-lg">Get In Touch</a>
                 </div>
-              </div>
-            </a>
-          </div>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  </section> -->
-
-
-
-  <div class="popup-container" id="popupContainer">
-    <button class="popup-close-button" id="popupCloseButton">&times;</button>
-    <img class="popup-image" src="./assets/img/ALL.jpg" alt="Popup Image">
-  </div>
-  <!-- card promo item end -->
-
-
-
-
-
-  <section style="background: #FCBC94;">
-
-    <div class="container">
-      <div class="row d-flex">
-        <div class="col-lg-6 col-sm-6 pt-1">
-
-          <h3>Our Contact</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, iure tenetur deleniti nulla quisquam sapiente. Quidem rerum dolorum deleniti, voluptatem, pariatur placeat nisi, sint sequi ducimus quae non sit molestiae!</p>
+            </div>
         </div>
-        <div class="col-lg-6 col-sm-6 text-dark mb-3 ">
-          <h1>lokasi kami</h1>
-          <p>Untuk lebih lanjut, bisa datang ke lokasi kami.</p>
-          <div class="d-flex " id="map" style="width: 600px; height:200px;"></div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5" style="background: var(--retro-light); color: var(--retro-dark);">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--retro-dark);">Our Services</h2>
+            <div class="row">
+                <?php foreach ($featuredServices as $service) : ?>
+                    <div class="col-lg-6 col-md-6 mb-4">
+                        <div class="service-card">
+                            <div class="service-icon">
+                                <i class="<?= $service['icon'] ?>"></i>
+                            </div>
+                            <h4 style="color: var(--retro-orange);"><?= $service['title'] ?></h4>
+                            <p class="mb-3"><?= $service['description'] ?></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success fs-6"><?= $service['price_range'] ?></span>
+                                <a href="./php/services.php" class="btn btn-sm btn-outline-warning">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="text-center">
+                <a href="./php/services.php" class="btn btn-retro">View All Services</a>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="row">
+                <?php foreach ($featuredProjects as $project) : ?>
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="project-card">
+                            <img src="./assets/img/<?= $project['image'] ?>" alt="<?= $project['title'] ?>" class="project-image">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= $project['title'] ?></h5>
+                                <p class="card-text"><?= substr($project['description'], 0, 100) ?>...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted"><?= $project['client_name'] ?></small>
+                                    <span class="badge bg-primary"><?= $project['service_title'] ?></span>
+                                </div>
+                                <?php if ($project['project_url']) : ?>
+                                    <a href="<?= $project['project_url'] ?>" target="_blank" class="btn btn-sm btn-outline-primary mt-2">View Project</a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="text-center">
+                <a href="./php/portfolio.php" class="btn btn-retro">View All Projects</a>
+            </div>
+        </div>
+    </section>
 
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-5" style="background: var(--retro-light); color: var(--retro-dark);">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--retro-dark);">What Our Clients Say</h2>
+            <div class="row">
+                <?php foreach ($featuredTestimonials as $testimonial) : ?>
+                    <div class="col-lg-4 mb-4">
+                        <div class="testimonial-card">
+                            <p class="mb-3"><?= $testimonial['testimonial_text'] ?></p>
+                            <div class="d-flex align-items-center">
+                                <img src="./assets/img/<?= $testimonial['client_photo'] ?>" alt="<?= $testimonial['client_name'] ?>" class="rounded-circle me-3" width="60" height="60">
+                                <div>
+                                    <h6 class="mb-0" style="color: var(--retro-orange);"><?= $testimonial['client_name'] ?></h6>
+                                    <small><?= $testimonial['client_position'] ?>, <?= $testimonial['client_company'] ?></small>
+                                    <div class="rating mt-1">
+                                        <?php for ($i = 0; $i < $testimonial['rating']; $i++) : ?>
+                                            <i class="fas fa-star"></i>
+                                        <?php endfor; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
 
-  <!-- nav hp -->
-  <?php include('./tambahanlain/navbarhp.php') ?>
-  <!-- nav hp end -->
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <form action="./php/contact.php" method="post" class="contact-form">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="service_interest" class="form-label">Service Interest</label>
+                                <select class="form-control" id="service_interest" name="service_interest">
+                                    <option value="">Select a service</option>
+                                    <?php 
+                                    $allServices = query("SELECT * FROM services WHERE status = 'active'");
+                                    foreach ($allServices as $service) : ?>
+                                        <option value="<?= $service['id'] ?>"><?= $service['title'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="budget_range" class="form-label">Budget Range</label>
+                                <select class="form-control" id="budget_range" name="budget_range">
+                                    <option value="">Select budget range</option>
+                                    <option value="< 5jt">< 5 Juta</option>
+                                    <option value="5jt - 15jt">5 - 15 Juta</option>
+                                    <option value="15jt - 30jt">15 - 30 Juta</option>
+                                    <option value="> 30jt">> 30 Juta</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="subject" name="subject" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" name="submit" class="btn btn-retro">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Footer -->
+    <?php include('./includes/footer.php') ?>
 
-
-  <!-- footer -->
-  <?php include('./tambahanlain/futer.php') ?>
-  <!-- footer end -->
-</body>
-
-<script>
-  mapboxgl.accessToken = 'pk.eyJ1IjoibGlzdmluZGFudSIsImEiOiJjbGkyOWhjc3UwMWFyM2NuejB1b3Z3ODd3In0.tihPfdMfJgp21xhCTku37Q';
-  const map = new mapboxgl.Map({
-    container: 'map', // container ID
-    style: 'mapbox://styles/mapbox/streets-v12', // style URL
-    center: [107.592096, -6.867794], // starting position [lng, lat]
-    zoom: 18, // starting zoom
-  });
-  // Tambahkan marker
-  var marker = new mapboxgl.Marker()
-    .setLngLat([107.592096, -6.867794])
-    .setPopup(new mapboxgl.Popup().setHTML("<h5>24e HarakujuHues</h5>"))
-    .addTo(map);
-
-  var zoomControl = new mapboxgl.NavigationControl();
-  map.addControl(zoomControl);
-
-  // Atur tingkat zoom
-  map.on('load', function() {
-    map.resize(); // Perbarui ukuran peta setelah memuatnya sepenuhnya
-    map.flyTo({
-      center: [107.592096, -6.867794],
-      zoom: 18
-    });
-  });
-</script>
-<script>
-  window.addEventListener('DOMContentLoaded', function() {
-    var cardkatalogSection = document.getElementById('cardkatalog');
-    var popupContainer = document.getElementById('popupContainer');
-    var popupCloseButton = document.getElementById('popupCloseButton');
-
-    var showPopup = function() {
-      popupContainer.classList.add('show');
-    };
-
-    // Periksa apakah popup telah ditampilkan sebelumnya
-    if (!localStorage.getItem('popupShown')) {
-      var cardkatalogSectionOffset = cardkatalogSection.offsetTop;
-      var windowHeight = window.innerHeight;
-
-      var handleScroll = function() {
-        var scrollPosition = window.pageYOffset;
-
-        if (scrollPosition + windowHeight >= cardkatalogSectionOffset) {
-          showPopup();
-          window.removeEventListener('scroll', handleScroll);
-          localStorage.setItem('popupShown', true); // Simpan informasi bahwa popup telah ditampilkan
-        }
-      };
-
-      window.addEventListener('scroll', handleScroll);
-
-      popupCloseButton.addEventListener('click', function() {
-        popupContainer.classList.remove('show');
-        localStorage.setItem('popupShown', true); // Simpan informasi bahwa popup telah ditampilkan
-      });
-    }
-  });
-</script>
-
-
-
-
-<!-- script bootstrap -->
-
-<script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
-</script>
-
-</html>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    
+    <!-- Custom

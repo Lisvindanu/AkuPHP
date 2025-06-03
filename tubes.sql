@@ -1,16 +1,9 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: Jun 11, 2023 at 03:07 PM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Database: anaphygon_retro
+-- Company Profile Database untuk Anaphygon Retro
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,143 +11,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tubes`
+-- Database: `anaphygon_retro`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `items`
---
-
-CREATE TABLE `items` (
-  `id` int NOT NULL,
-  `gambar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `nama` char(200) DEFAULT NULL,
-  `brand` char(200) DEFAULT NULL,
-  `harga` decimal(10,3) DEFAULT NULL,
-  `detail` char(200) DEFAULT NULL,
-  `kategori` varchar(200) DEFAULT NULL,
-  `kategori_id` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `items`
---
-
-INSERT INTO `items` (`id`, `gambar`, `nama`, `brand`, `harga`, `detail`, `kategori`, `kategori_id`) VALUES
-(30, '648514f9326eb.png', 'Harajuku WomensWear 1', 'HarajukuHues', 1000000.000, 'authentic for girl', 'wanita', 22),
-(31, '648515205762f.jpg', 'Harajuku WomensWear 2', 'HarajukuHues', 1000000.000, 'authentic for girl', 'wanita', 22),
-(32, '648515506ff30.jpg', 'Harajuku WomensWear 3', 'HarajukuHues', 1500000.000, 'authentic for girl', 'wanita', 22),
-(33, '648516976ec9a.jpg', 'Harajuku mensWear 1', 'HarajukuHues', 1000000.000, 'cool men', 'pria', 23),
-(34, '648516c4a323c.png', 'Harajuku mensWear 2', 'HarajukuHues', 1500000.000, 'cool men styling', 'pria', 23),
-(35, '6485e206ce241.jpg', 'Harajuku mensWear 3', 'HarajukuHues', 100.000, 'cool men', 'pria', 23),
-(36, '6485e24ea30ff.webp', 'Harajuku BottomsWear', 'HarajukuHues', 1000.000, 'Pants Harajukuhues', 'celana', 24),
-(37, '6485e294887ff.png', 'Harajuku Upper Wear', 'HarajukuHues', 300.000, 'upperwears by harajukuhues', 'baju', 25),
-(38, '6485e2dec49b7.png', 'Harajuku accessories', 'HarajukuHues', 100.000, 'accessories by harajukuhues', 'aksesoris', 26);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `kategori`
---
-
-CREATE TABLE `kategori` (
-  `id` int NOT NULL,
-  `nama` varchar(200) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `kategori`
---
-
-INSERT INTO `kategori` (`id`, `nama`) VALUES
-(22, 'wanita'),
-(23, 'pria'),
-(24, 'celana'),
-(25, 'baju'),
-(26, 'aksesoris');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `keranjang`
---
-
-CREATE TABLE `keranjang` (
-  `id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `item_id` int NOT NULL,
-  `kategori_id` int DEFAULT NULL,
-  `jumlah` int NOT NULL,
-  `lunas` tinyint(1) DEFAULT '0',
-  `total_harga` int DEFAULT NULL,
-  `harga` decimal(10,3) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `keranjang`
---
-
-INSERT INTO `keranjang` (`id`, `user_id`, `item_id`, `kategori_id`, `jumlah`, `lunas`, `total_harga`, `harga`) VALUES
-(61, 22, 30, 22, 1, 0, NULL, 1000000.000),
-(62, 22, 34, 23, 4, 0, NULL, 1500000.000);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pembayaran`
---
-
-CREATE TABLE `pembayaran` (
-  `id` int NOT NULL,
-  `user_id` int DEFAULT NULL,
-  `total_harga` decimal(10,3) DEFAULT NULL,
-  `tanggal_pembayaran` datetime DEFAULT CURRENT_TIMESTAMP,
-  `total_pembayaran` decimal(10,3) DEFAULT NULL,
-  `metode_pembayaran` varchar(50) DEFAULT NULL,
-  `nomor_rekening` varchar(50) DEFAULT NULL,
-  `nama_pembeli` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `pembayaran`
---
-
-INSERT INTO `pembayaran` (`id`, `user_id`, `total_harga`, `tanggal_pembayaran`, `total_pembayaran`, `metode_pembayaran`, `nomor_rekening`, `nama_pembeli`) VALUES
-(33, 18, 12222.000, '2023-05-28 09:22:08', 12222.000, NULL, NULL, NULL),
-(34, 18, 100000.000, '2023-05-28 09:23:53', 100000.000, NULL, NULL, NULL),
-(35, 18, 100000.000, '2023-05-28 09:26:42', 100000.000, NULL, NULL, NULL),
-(36, 15, 0.000, '2023-05-29 09:40:56', 0.000, NULL, NULL, NULL),
-(37, 15, 0.000, '2023-05-29 09:41:07', 0.000, NULL, NULL, NULL),
-(38, 15, 0.000, '2023-05-29 09:41:39', 0.000, NULL, NULL, NULL),
-(39, 15, 0.000, '2023-05-29 09:41:53', 0.000, NULL, NULL, NULL),
-(40, 15, 0.000, '2023-05-29 09:42:49', 0.000, NULL, NULL, NULL),
-(41, 19, 100000.000, '2023-05-29 09:43:23', 100000.000, NULL, NULL, NULL),
-(42, 20, 100000.000, '2023-05-29 11:31:55', 100000.000, NULL, NULL, NULL),
-(43, 20, 100000.000, '2023-05-29 11:36:09', 100000.000, NULL, NULL, NULL),
-(44, 20, 0.000, '2023-05-29 11:38:17', 0.000, NULL, NULL, NULL),
-(45, 20, 0.000, '2023-05-29 11:38:28', 0.000, NULL, NULL, NULL),
-(46, 20, 0.000, '2023-05-29 03:18:32', 0.000, NULL, NULL, NULL),
-(47, 20, 0.000, '2023-05-29 03:42:07', 0.000, NULL, NULL, NULL),
-(48, 20, 100000.000, '2023-05-29 03:46:25', 100000.000, NULL, NULL, NULL),
-(49, 15, 0.000, '2023-05-29 10:48:46', 0.000, NULL, NULL, NULL),
-(50, 15, 100000.000, '2023-05-30 01:10:42', 100000.000, NULL, NULL, NULL),
-(51, 15, 0.000, '2023-05-30 01:11:13', 0.000, NULL, NULL, NULL),
-(52, 4, 10.000, '2023-05-30 01:12:18', 10.000, NULL, NULL, NULL),
-(53, 15, 0.000, '2023-05-31 12:04:53', 0.000, NULL, NULL, NULL),
-(54, 15, 100000.000, '2023-05-31 12:05:56', 100000.000, NULL, NULL, NULL),
-(55, 15, 12222.000, '2023-06-01 07:43:24', 12222.000, NULL, NULL, NULL),
-(56, 15, 112222.000, '2023-06-01 07:44:06', 112222.000, NULL, NULL, NULL),
-(57, 22, 0.000, '2023-06-01 11:45:46', 0.000, NULL, NULL, NULL),
-(58, 22, 0.000, '2023-06-01 11:47:52', 0.000, NULL, NULL, NULL),
-(59, 22, 100000.000, '2023-06-02 12:27:11', 100000.000, NULL, NULL, NULL),
-(60, 22, 10.000, '2023-06-02 12:27:25', 10.000, NULL, NULL, NULL),
-(61, 22, 10.000, '2023-06-02 12:31:59', 10.000, NULL, NULL, NULL),
-(62, 22, 10.000, '2023-06-02 12:36:19', 10.000, 'Rekening', '766601014121534', 'Lisvindanu'),
-(63, 22, 10.000, '2023-06-02 12:37:58', 10.000, 'transfer_bank', '766601014121534', 'Lisvindanu'),
-(64, 22, 200000.000, '2023-06-04 05:52:17', 200000.000, 'transfer_bank', '', ''),
-(65, 22, 3000000.000, '2023-06-11 02:35:46', 3000000.000, 'transfer_bank', '76887', 'hgf');
 
 -- --------------------------------------------------------
 
@@ -166,132 +24,230 @@ CREATE TABLE `users` (
   `id` int NOT NULL,
   `username` varchar(200) DEFAULT NULL,
   `password` varchar(200) DEFAULT NULL,
-  `role` enum('user','admin') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'user'
+  `email` varchar(200) DEFAULT NULL,
+  `role` enum('user','admin') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'user',
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
-(3, 'hedi', '$2y$10$08ks9y7rEgDbbOyUqRto7.AIm7emEQwwCkafpY01H7uj0PSscnQpa', 'user'),
-(4, 'lisvindanu', '$2y$10$8ZitzIvizTzKyRskappOR.1yQwdpOoLwQfquHt83bXtWdnc6zLi0m', 'admin'),
-(5, 'doni', '$2y$10$eeXFCqyX1JDe2yZQpN3.w.2rc82QzHhpnrD0wZPIS.ik0xvu.TnT.', 'user'),
-(6, 'dragnell', '$2y$10$q3qEllbtE844oH1bBc1.jOH46sl6m/QV/BQE2XjLzjfseEei9QjVq', 'user'),
-(7, 'pakih', '$2y$10$eKoz9KgrSLB6TXrTPXFWiOXdEQoKQtyJaucEF4W3XpSjf7wNm4MEu', 'user'),
-(8, 'unad', '$2y$10$Y2hGsTCAud0eR5ZIfvMrueSaRTzDyVmVDoD5RMRpj2O52sHD0Nzpy', 'user'),
-(10, 'unaddgacor', '$2y$10$oqFScCIRcGliUNGGR9ayeuLoEtK.oRKmXOqud9vmVDEz4lqxVkiP6', 'user'),
-(11, 'unaddgacor1', '$2y$10$KvTExxJ0dgojS0INMb8r2OcMP0.Etf1O2uax7DJJcQVqabI2.6cfi', 'user'),
-(13, 'und1', '$2y$10$yIRV7gOOCynjqcIGe9iW7.p63zH3yzZfD3WUyVa//i6SPtnxTnW.i', 'user'),
-(14, 'unad12', '$2y$10$xKCC/MPubtJQiVHqzij1POh.KNhATjXzgR/5jfEY75ssznZDqyOke', 'admin'),
-(15, 'a', '$2y$10$/IpzhG/4ksKt.d6YGdwiW.Bh2TsrgsjvdEQdODzZ9QR/8lgTzKfiC', 'user'),
-(16, 'as', '$2y$10$HFDQePCm5wmY4eljJmCIX.8XznpRVoQQvIsAgphucnzLHlZJkluWq', 'user'),
-(17, 's', '$2y$10$dM9Dtl1O/naeoy6PhOBIXuzXLG7DWHqbvgSlcXKzLTgrRFlVSzCea', 'user'),
-(18, 'pp', '$2y$10$V/qR/9Fn9yOFq0QDsCRw2OmpvZ130RvPZqXhd7BSMXJzkhxVpRIZC', 'user'),
-(19, 't', '$2y$10$bRH97mFQUS91kjxcQbzK2e0oLQ/FgoOCTNaja2Vv2.Br3zvfueHFW', 'user'),
-(20, 'ahmad', '$2y$10$1dclEpbrigQgZsGFnVNuN.S9Qgx87ee5bDFV1KAouQWBPHjccokha', 'user'),
-(21, 'aa', '$2y$10$jXMAXkShOpA9pozKDtal1OJam46lkNIrlWJt1el8wHFX6gcJ/gq4a', 'user'),
-(22, 'qq', '$2y$10$eewXjIi2doWd/vV3eNJxK.brqSgnHZ3TMj8puXonKjtMYBhCaDwNy', 'user'),
-(24, 'qqqq', '$2y$10$Hz0e8kGtr.6mx3yw/Y4V6.514/D3VhAGI7BO6Q1D5gnRciNQbigYu', 'user'),
-(25, 'w', '$2y$10$HfhzhMRu/HpkwSFRi8W3tuAel0p5egr7WQoGYdEE67EDa5eRpwFTS', 'user');
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`, `created_at`) VALUES
+(1, 'admin', '$2y$10$8ZitzIvizTzKyRskappOR.1yQwdpOoLwQfquHt83bXtWdnc6zLi0m', 'admin@anaphygon.com', 'admin', '2025-06-03 15:00:00'),
+(2, 'user1', '$2y$10$eKoz9KgrSLB6TXrTPXFWiOXdEQoKQtyJaucEF4W3XpSjf7wNm4MEu', 'user@example.com', 'user', '2025-06-03 15:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `services`
+--
+
+CREATE TABLE `services` (
+  `id` int NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `icon` varchar(100) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `price_range` varchar(100) DEFAULT NULL,
+  `status` enum('active','inactive') DEFAULT 'active',
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `services`
+--
+
+INSERT INTO `services` (`id`, `title`, `description`, `icon`, `image`, `price_range`, `status`, `created_at`) VALUES
+(1, 'Retro Web Design', 'Desain website dengan nuansa retro dan vintage yang unik dan menarik', 'fas fa-paint-brush', 'retro-web.jpg', '5jt - 15jt', 'active', '2025-06-03 15:00:00'),
+(2, 'Brand Identity Design', 'Pembuatan identitas brand retro yang memorable dan timeless', 'fas fa-star', 'brand-identity.jpg', '3jt - 10jt', 'active', '2025-06-03 15:00:00'),
+(3, 'Retro App Development', 'Pengembangan aplikasi mobile dengan interface retro modern', 'fas fa-mobile-alt', 'retro-app.jpg', '10jt - 25jt', 'active', '2025-06-03 15:00:00'),
+(4, 'Vintage Marketing Materials', 'Desain materi marketing dengan gaya vintage dan retro', 'fas fa-bullhorn', 'vintage-marketing.jpg', '2jt - 8jt', 'active', '2025-06-03 15:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
+
+CREATE TABLE `projects` (
+  `id` int NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `client_name` varchar(200) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `project_url` varchar(500) DEFAULT NULL,
+  `service_id` int DEFAULT NULL,
+  `completion_date` date DEFAULT NULL,
+  `status` enum('completed','in_progress','planning') DEFAULT 'completed',
+  `featured` tinyint(1) DEFAULT '0',
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `projects`
+--
+
+INSERT INTO `projects` (`id`, `title`, `description`, `client_name`, `image`, `project_url`, `service_id`, `completion_date`, `status`, `featured`, `created_at`) VALUES
+(1, 'RetroTech Startup Website', 'Website company profile untuk startup teknologi dengan konsep retro-futuristic', 'RetroTech Solutions', 'retrotech-project.jpg', 'https://retrotech-demo.com', 1, '2024-12-15', 'completed', 1, '2025-06-03 15:00:00'),
+(2, 'Vintage Coffee Shop Branding', 'Complete branding package untuk coffee shop dengan tema vintage', 'Brew & Beans Cafe', 'vintage-coffee.jpg', NULL, 2, '2024-11-20', 'completed', 1, '2025-06-03 15:00:00'),
+(3, 'Retro Gaming Mobile App', 'Aplikasi mobile game dengan interface pixel art retro', 'Pixel Games Studio', 'retro-gaming-app.jpg', 'https://play.google.com/retrogame', 3, '2025-01-10', 'completed', 1, '2025-06-03 15:00:00'),
+(4, 'Classic Car Dealership Website', 'Website untuk dealer mobil klasik dengan desain retro elegant', 'Classic Auto Gallery', 'classic-cars.jpg', 'https://classicauto-demo.com', 1, '2024-10-30', 'completed', 0, '2025-06-03 15:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `testimonials`
+--
+
+CREATE TABLE `testimonials` (
+  `id` int NOT NULL,
+  `client_name` varchar(200) NOT NULL,
+  `client_position` varchar(200) DEFAULT NULL,
+  `client_company` varchar(200) DEFAULT NULL,
+  `testimonial_text` text NOT NULL,
+  `client_photo` varchar(255) DEFAULT NULL,
+  `rating` int DEFAULT '5',
+  `project_id` int DEFAULT NULL,
+  `featured` tinyint(1) DEFAULT '0',
+  `status` enum('active','inactive') DEFAULT 'active',
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `testimonials`
+--
+
+INSERT INTO `testimonials` (`id`, `client_name`, `client_position`, `client_company`, `testimonial_text`, `client_photo`, `rating`, `project_id`, `featured`, `status`, `created_at`) VALUES
+(1, 'Sarah Johnson', 'CEO', 'RetroTech Solutions', 'Anaphygon Retro berhasil menciptakan website yang benar-benar mencerminkan visi retro-futuristic kami. Tim yang sangat profesional dan kreatif!', 'sarah-johnson.jpg', 5, 1, 1, 'active', '2025-06-03 15:00:00'),
+(2, 'Michael Chen', 'Owner', 'Brew & Beans Cafe', 'Branding yang dibuat oleh Anaphygon Retro sangat membantu cafe kami menciptakan identitas yang unik. Konsep vintage-nya pas banget!', 'michael-chen.jpg', 5, 2, 1, 'active', '2025-06-03 15:00:00'),
+(3, 'David Rodriguez', 'Game Director', 'Pixel Games Studio', 'Interface retro yang dibuat untuk game kami mendapat respon luar biasa dari players. Benar-benar nostalgia gaming era 80-90an!', 'david-rodriguez.jpg', 5, 3, 1, 'active', '2025-06-03 15:00:00'),
+(4, 'Jennifer Williams', 'Marketing Manager', 'Classic Auto Gallery', 'Website kami sekarang terlihat sangat elegant dan mencerminkan karakter mobil-mobil klasik yang kami jual. Excellent work!', 'jennifer-williams.jpg', 4, 4, 0, 'active', '2025-06-03 15:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contact_messages`
+--
+
+CREATE TABLE `contact_messages` (
+  `id` int NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `subject` varchar(300) NOT NULL,
+  `message` text NOT NULL,
+  `service_interest` int DEFAULT NULL,
+  `budget_range` varchar(100) DEFAULT NULL,
+  `status` enum('new','read','replied','archived') DEFAULT 'new',
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `replied_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `contact_messages`
+--
+
+INSERT INTO `contact_messages` (`id`, `name`, `email`, `phone`, `subject`, `message`, `service_interest`, `budget_range`, `status`, `created_at`) VALUES
+(1, 'Alex Thompson', 'alex@example.com', '+62812345678', 'Inquiry about Retro Web Design', 'Hi, saya tertarik dengan layanan retro web design untuk startup saya. Bisa diskusi lebih lanjut?', 1, '5jt - 15jt', 'new', '2025-06-03 10:00:00'),
+(2, 'Maria Gonzalez', 'maria@restaurant.com', '+62876543210', 'Branding for Restaurant', 'Saya membutuhkan complete branding untuk restaurant baru saya dengan konsep vintage. Mohon info lebih lanjut.', 2, '3jt - 10jt', 'read', '2025-06-03 11:30:00');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `items`
---
-ALTER TABLE `items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kategori_id` (`kategori_id`);
-
---
--- Indexes for table `kategori`
---
-ALTER TABLE `kategori`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `keranjang`
---
-ALTER TABLE `keranjang`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `item_id` (`item_id`),
-  ADD KEY `kategori_id` (`kategori_id`);
-
---
--- Indexes for table `pembayaran`
---
-ALTER TABLE `pembayaran`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_pembayaran_users` (`user_id`) USING BTREE;
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `services`
+--
+ALTER TABLE `services`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `service_id` (`service_id`);
+
+--
+-- Indexes for table `testimonials`
+--
+ALTER TABLE `testimonials`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `project_id` (`project_id`);
+
+--
+-- Indexes for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `service_interest` (`service_interest`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `items`
---
-ALTER TABLE `items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
-
---
--- AUTO_INCREMENT for table `kategori`
---
-ALTER TABLE `kategori`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-
---
--- AUTO_INCREMENT for table `keranjang`
---
-ALTER TABLE `keranjang`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
-
---
--- AUTO_INCREMENT for table `pembayaran`
---
-ALTER TABLE `pembayaran`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
-
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `services`
+--
+ALTER TABLE `services`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `testimonials`
+--
+ALTER TABLE `testimonials`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `items`
+-- Constraints for table `projects`
 --
-ALTER TABLE `items`
-  ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`);
+ALTER TABLE `projects`
+  ADD CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`);
 
 --
--- Constraints for table `keranjang`
+-- Constraints for table `testimonials`
 --
-ALTER TABLE `keranjang`
-  ADD CONSTRAINT `keranjang_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `keranjang_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
-  ADD CONSTRAINT `keranjang_ibfk_3` FOREIGN KEY (`kategori_id`) REFERENCES `kategori` (`id`);
+ALTER TABLE `testimonials`
+  ADD CONSTRAINT `testimonials_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`);
 
 --
--- Constraints for table `pembayaran`
+-- Constraints for table `contact_messages`
 --
-ALTER TABLE `pembayaran`
-  ADD CONSTRAINT `FK_pembayaran_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `pembayaran_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `contact_messages`
+  ADD CONSTRAINT `contact_messages_ibfk_1` FOREIGN KEY (`service_interest`) REFERENCES `services` (`id`);
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

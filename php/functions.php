@@ -1,7 +1,7 @@
 <?php
 
 // koneksi ke database
-$conn = mysqli_connect("localhost:3306", "root", "password", "tubes");
+$conn = mysqli_connect("localhost:3306", "root", "password", "anaphygon_retro");
 
 function query($query)
 {
@@ -14,57 +14,86 @@ function query($query)
     return $rows;
 }
 
-function tambah($data)
+function tambahService($data)
 {
     global $conn;
 
-    // Ambil data dari tiap elemen dalam form
-
-    $nama = htmlspecialchars($data["nama"]);
-    $brand = htmlspecialchars($data["brand"]);
-    $harga = htmlspecialchars($data["harga"]);
-    $detail = htmlspecialchars($data["detail"]);
-    $kategori = htmlspecialchars($data["kategori"]);
+    $title = htmlspecialchars($data["title"]);
+    $description = htmlspecialchars($data["description"]);
+    $icon = htmlspecialchars($data["icon"]);
+    $price_range = htmlspecialchars($data["price_range"]);
+    $status = htmlspecialchars($data["status"]);
 
     // Upload gambar
-    $gambar = upload();
-    if (!$gambar) {
+    $image = upload();
+    if (!$image) {
         return false;
     }
 
-    // Cek apakah kategori sudah ada di tabel kategori
-    $query = "SELECT id FROM kategori WHERE nama = '$kategori'";
-    $result = mysqli_query($conn, $query);
-
-    // Jika kategori belum ada, tambahkan ke tabel kategori
-    if (mysqli_num_rows($result) == 0) {
-        $query = "INSERT INTO kategori (nama) VALUES ('$kategori')";
-        mysqli_query($conn, $query);
-    }
-
-    // Dapatkan id dari tabel kategori berdasarkan nama kategori
-    $query = "SELECT id FROM kategori WHERE nama = '$kategori'";
-    $result = mysqli_query($conn, $query);
-    $row = mysqli_fetch_assoc($result);
-    $kategori_id = $row['id'];
-
-    // Query insert data
-    $query = "INSERT INTO items (gambar, nama, brand, harga, detail, kategori, kategori_id)
-              VALUES ('$gambar', '$nama', '$brand', '$harga', '$detail', '$kategori', '$kategori_id')";
+    $query = "INSERT INTO services (title, description, icon, image, price_range, status)
+              VALUES ('$title', '$description', '$icon', '$image', '$price_range', '$status')";
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
 }
 
+function tambahProject($data)
+{
+    global $conn;
 
+    $title = htmlspecialchars($data["title"]);
+    $description = htmlspecialchars($data["description"]);
+    $client_name = htmlspecialchars($data["client_name"]);
+    $project_url = htmlspecialchars($data["project_url"]);
+    $service_id = htmlspecialchars($data["service_id"]);
+    $completion_date = htmlspecialchars($data["completion_date"]);
+    $status = htmlspecialchars($data["status"]);
+    $featured = isset($data["featured"]) ? 1 : 0;
 
+    // Upload gambar
+    $image = upload();
+    if (!$image) {
+        return false;
+    }
+
+    $query = "INSERT INTO projects (title, description, client_name, image, project_url, service_id, completion_date, status, featured)
+              VALUES ('$title', '$description', '$client_name', '$image', '$project_url', '$service_id', '$completion_date', '$status', '$featured')";
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahTestimonial($data)
+{
+    global $conn;
+
+    $client_name = htmlspecialchars($data["client_name"]);
+    $client_position = htmlspecialchars($data["client_position"]);
+    $client_company = htmlspecialchars($data["client_company"]);
+    $testimonial_text = htmlspecialchars($data["testimonial_text"]);
+    $rating = htmlspecialchars($data["rating"]);
+    $project_id = htmlspecialchars($data["project_id"]);
+    $featured = isset($data["featured"]) ? 1 : 0;
+    $status = htmlspecialchars($data["status"]);
+
+    // Upload foto client
+    $client_photo = upload();
+    if (!$client_photo) {
+        return false;
+    }
+
+    $query = "INSERT INTO testimonials (client_name, client_position, client_company, testimonial_text, client_photo, rating, project_id, featured, status)
+              VALUES ('$client_name', '$client_position', '$client_company', '$testimonial_text', '$client_photo', '$rating', '$project_id', '$featured', '$status')";
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
 
 function upload()
 {
     // Cek apakah input file 'gambar' ada
     if (!isset($_FILES['gambar'])) {
-        var_dump($_FILES['gambar']);
-        return "Gambar tidak ditemukan";
+        return "nophoto.png"; // Default image
     }
 
     $namafile = $_FILES['gambar']['name'];
@@ -74,7 +103,7 @@ function upload()
 
     // Cek apakah tidak ada gambar yang diupload
     if ($error === 4) {
-        return "Pilih gambar terlebih dahulu";
+        return "nophoto.png"; // Default image
     }
 
     // Cek apakah yang diupload adalah gambar
@@ -82,15 +111,14 @@ function upload()
     $ekstensigambar = explode('.', $namafile);
     $ekstensigambar = strtolower(end($ekstensigambar));
     if (!in_array($ekstensigambar, $ekstensigambarValid)) {
-        return "Yang Anda upload bukan gambar";
+        return false;
     }
 
-    // Cek jika ukurannya terlalu besar
+    // Cek jika ukurannya terlalu besar (50MB)
     if ($ukuranfile > 50000000) {
-        return "Ukuran gambar terlalu besar";
+        return false;
     }
 
-    // Lolos pengecekan, gambar siap diupload
     // Generate nama gambar baru
     $namafilebaru = uniqid();
     $namafilebaru .= '.';
@@ -101,31 +129,58 @@ function upload()
     return $namafilebaru;
 }
 
-
-
-function hapus($id)
+function hapusService($id)
 {
     global $conn;
-    mysqli_query($conn, "DELETE FROM items WHERE id = $id");
+    mysqli_query($conn, "DELETE FROM services WHERE id = $id");
     return mysqli_affected_rows($conn);
 }
 
+function hapusProject($id)
+{
+    global $conn;
+    mysqli_query($conn, "DELETE FROM projects WHERE id = $id");
+    return mysqli_affected_rows($conn);
+}
 
-// regis
+function hapusTestimonial($id)
+{
+    global $conn;
+    mysqli_query($conn, "DELETE FROM testimonials WHERE id = $id");
+    return mysqli_affected_rows($conn);
+}
+
+function hapusMessage($id)
+{
+    global $conn;
+    mysqli_query($conn, "DELETE FROM contact_messages WHERE id = $id");
+    return mysqli_affected_rows($conn);
+}
+
+// User registration
 function registrasi($data)
 {
     global $conn;
 
     $username = strtolower(stripslashes($data["username"]));
+    $email = strtolower(stripslashes($data["email"]));
     $password = mysqli_real_escape_string($conn, $data["password"]);
     $password2 = mysqli_real_escape_string($conn, $data["password2"]);
-    $role = isset($data["role"]) ? $data["role"] : ""; // Assign an empty string if the "role" key is not set
 
     // Cek username sudah ada atau belum
     $result = mysqli_query($conn, "SELECT username FROM users WHERE username = '$username'");
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
         alert('Username sudah terdaftar!');
+        </script>";
+        return false;
+    }
+
+    // Cek email sudah ada atau belum
+    $result = mysqli_query($conn, "SELECT email FROM users WHERE email = '$email'");
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+        alert('Email sudah terdaftar!');
         </script>";
         return false;
     }
@@ -141,157 +196,127 @@ function registrasi($data)
     // Enkripsi password
     $password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Tambahkan user baru ke database dengan role
-    mysqli_query($conn, "INSERT INTO users (username, password) VALUES ('$username', '$password')");
+    // Tambahkan user baru ke database
+    mysqli_query($conn, "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')");
 
     return mysqli_affected_rows($conn);
 }
 
-
-function ubah($data)
+function ubahService($data)
 {
     global $conn;
-    // ambil data dari tiap elemen dalam form
-    $id = ($data["id"]);
-    $nama = htmlspecialchars($data["nama"]);
-    $brand = htmlspecialchars($data["brand"]);
-    $harga = htmlspecialchars($data["harga"]);
-    $kategori = htmlspecialchars($data["kategori"]);
-    $detail = htmlspecialchars($data["detail"]);
-    $gambarLama = htmlspecialchars($data["gambarLama"]);
-
+    
+    $id = $data["id"];
+    $title = htmlspecialchars($data["title"]);
+    $description = htmlspecialchars($data["description"]);
+    $icon = htmlspecialchars($data["icon"]);
+    $price_range = htmlspecialchars($data["price_range"]);
+    $status = htmlspecialchars($data["status"]);
+    $imageLama = htmlspecialchars($data["imageLama"]);
 
     // cek apakah user pilih gambar baru atau tidak
     if ($_FILES['gambar']['error'] === 4) {
-        $gambar = $gambarLama;
+        $image = $imageLama;
     } else {
-        $gambar = upload();
+        $image = upload();
     }
-    // query insert data
 
-    $query = "UPDATE items SET
-
-   
-     nama = '$nama', 
-     brand = '$brand',
-     harga = '$harga', 
-     gambar = '$gambar' ,
-     kategori = '$kategori',
-     detail = '$detail'
-     WHERE id = $id
-     
-     ";
+    $query = "UPDATE services SET
+        title = '$title', 
+        description = '$description',
+        icon = '$icon', 
+        image = '$image',
+        price_range = '$price_range',
+        status = '$status'
+        WHERE id = $id";
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
 }
 
-function cari($keyword)
+function ubahProject($data)
 {
-    $query = "SELECT * FROM items
+    global $conn;
+    
+    $id = $data["id"];
+    $title = htmlspecialchars($data["title"]);
+    $description = htmlspecialchars($data["description"]);
+    $client_name = htmlspecialchars($data["client_name"]);
+    $project_url = htmlspecialchars($data["project_url"]);
+    $service_id = htmlspecialchars($data["service_id"]);
+    $completion_date = htmlspecialchars($data["completion_date"]);
+    $status = htmlspecialchars($data["status"]);
+    $featured = isset($data["featured"]) ? 1 : 0;
+    $imageLama = htmlspecialchars($data["imageLama"]);
+
+    // cek apakah user pilih gambar baru atau tidak
+    if ($_FILES['gambar']['error'] === 4) {
+        $image = $imageLama;
+    } else {
+        $image = upload();
+    }
+
+    $query = "UPDATE projects SET
+        title = '$title', 
+        description = '$description',
+        client_name = '$client_name',
+        image = '$image',
+        project_url = '$project_url',
+        service_id = '$service_id',
+        completion_date = '$completion_date',
+        status = '$status',
+        featured = '$featured'
+        WHERE id = $id";
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function cariServices($keyword)
+{
+    $query = "SELECT * FROM services
                 WHERE 
-            nama LIKE '%$keyword%' OR
-            brand LIkE '%$keyword%' OR
-            harga LIKE '%$keyword%' OR
-            detail LIKE  '%$keyword%'
+            title LIKE '%$keyword%' OR
+            description LIKE '%$keyword%' OR
+            price_range LIKE '%$keyword%'
         ";
     return query($query);
 }
 
-
-
-function tambahKeKeranjang($conn, $item_id, $kategori_id, $user_id)
+function cariProjects($keyword)
 {
-    $jumlah = 1;
-
-    // Cek apakah produk sudah ada di keranjang
-    $result = mysqli_query($conn, "SELECT * FROM keranjang WHERE user_id = '$user_id' AND item_id = '$item_id'");
-    if (mysqli_num_rows($result) > 0) {
-        // Jika sudah ada, tambahkan jumlah
-        $row = mysqli_fetch_assoc($result);
-        $jumlah += $row["jumlah"];
-        mysqli_query($conn, "UPDATE keranjang SET jumlah = $jumlah WHERE user_id = '$user_id' AND item_id = '$item_id'");
-    } else {
-        // Jika belum ada, tambahkan produk baru ke keranjang
-        if ($kategori_id !== NULL) {
-            $query = "SELECT harga FROM items WHERE id = '$item_id'";
-            $result = mysqli_query($conn, $query);
-            if (mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
-                $harga = $row['harga'];
-                mysqli_query($conn, "INSERT INTO keranjang (user_id, item_id, kategori_id, harga, jumlah) VALUES ('$user_id', '$item_id', '$kategori_id', $harga, $jumlah)");
-            } else {
-                // Jika item tidak ditemukan, berikan nilai default untuk harga
-                $harga = 0;
-                mysqli_query($conn, "INSERT INTO keranjang (user_id, item_id, kategori_id, harga, jumlah) VALUES ('$user_id', '$item_id', '$kategori_id', $harga, $jumlah)");
-            }
-        } else {
-            // Jika tidak ada kategori, berikan nilai default untuk harga
-            $harga = 0;
-            mysqli_query($conn, "INSERT INTO keranjang (user_id, item_id, jumlah) VALUES ('$user_id', '$item_id', $jumlah)");
-        }
-    }
-
-    // Redirect ke halaman keranjang
-    header("Location: keranjang.php");
-    exit;
+    $query = "SELECT * FROM projects
+                WHERE 
+            title LIKE '%$keyword%' OR
+            description LIKE '%$keyword%' OR
+            client_name LIKE '%$keyword%'
+        ";
+    return query($query);
 }
 
-
-
-function prosesPembayaran($conn, $user_id, $metode_pembayaran, $nomor_rekening, $nama_pembeli)
+function kirimPesan($data)
 {
-    // Set zona waktu ke Waktu Indonesia Barat (WIB)
-    date_default_timezone_set('Asia/Jakarta');
+    global $conn;
 
-    // Ambil data keranjang berdasarkan user_id
-    $query = "SELECT * FROM keranjang WHERE user_id = $user_id";
-    $result = mysqli_query($conn, $query);
+    $name = htmlspecialchars($data["name"]);
+    $email = htmlspecialchars($data["email"]);
+    $phone = htmlspecialchars($data["phone"]);
+    $subject = htmlspecialchars($data["subject"]);
+    $message = htmlspecialchars($data["message"]);
+    $service_interest = htmlspecialchars($data["service_interest"]);
+    $budget_range = htmlspecialchars($data["budget_range"]);
 
-    // Periksa apakah ada data keranjang yang ditemukan
-    if (mysqli_num_rows($result) > 0) {
-        // Ambil total harga dari data keranjang
-        $total_harga = 0;
-        while ($row = mysqli_fetch_assoc($result)) {
-            if (array_key_exists('jumlah', $row) && array_key_exists('harga', $row)) {
-                $total_harga += $row['jumlah'] * $row['harga'];
-            }
-        }
+    $query = "INSERT INTO contact_messages (name, email, phone, subject, message, service_interest, budget_range)
+              VALUES ('$name', '$email', '$phone', '$subject', '$message', '$service_interest', '$budget_range')";
+    mysqli_query($conn, $query);
 
-        // Insert data pembayaran ke dalam tabel pembayaran
-        $tanggal_pembayaran = date('Y-m-d h:i:s'); // Tanggal dan waktu saat ini
-        $total_pembayaran = $total_harga;
-
-        // Generate nomor resi acak
-        $resi = generateRandomResi(); // Fungsi generateRandomResi() menghasilkan nomor resi acak
-
-        $insertQuery = "INSERT INTO pembayaran (id, user_id, metode_pembayaran, nomor_rekening, nama_pembeli, total_harga, tanggal_pembayaran, total_pembayaran) 
-                        VALUES (NULL, $user_id, '$metode_pembayaran', '$nomor_rekening', '$nama_pembeli', $total_harga, '$tanggal_pembayaran',  $total_pembayaran)";
-
-        if (mysqli_query($conn, $insertQuery)) {
-            // Jika berhasil, hapus data keranjang yang sudah dibayar
-            $deleteQuery = "DELETE FROM keranjang WHERE user_id = $user_id";
-            mysqli_query($conn, $deleteQuery);
-
-            // Kembalikan nilai resi
-            return $resi;
-        } else {
-            // Handle error saat menjalankan query INSERT
-            echo "Error: " . mysqli_error($conn);
-        }
-    }
+    return mysqli_affected_rows($conn);
 }
 
-function generateRandomResi()
+function updateMessageStatus($id, $status)
 {
-    // Generate nomor resi acak
-    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $length = 10;
-    $randomResi = '';
-
-    for ($i = 0; $i < $length; $i++) {
-        $randomResi .= $characters[rand(0, strlen($characters) - 1)];
-    }
-
-    return $randomResi;
+    global $conn;
+    $query = "UPDATE contact_messages SET status = '$status' WHERE id = $id";
+    mysqli_query($conn, $query);
+    return mysqli_affected_rows($conn);
 }
