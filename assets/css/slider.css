@@ -1,0 +1,133 @@
+.carousel-indicators button.thumbnail {
+  width: 200px;
+  transition: all 0.55s ease;
+  position: relative;
+}
+
+.carousel-indicators button.thumbnail:not(.active) {
+  opacity: 0.5;
+}
+
+.carousel-indicators {
+  position: static;
+  left: 0;
+}
+
+.carousel-fluid .carousel-inner {
+  max-height: 70vh;
+}
+
+.card {
+  width: 95%;
+}
+
+.card-body h4 {
+  color: #000;
+  font-weight: 600;
+  font-style: 24px;
+  line-height: 0.8rem;
+}
+.card-body p {
+  font-size: 12px !important;
+  color: #807e7e !important;
+}
+
+.card-fasilitas {
+  margin-top: 100px !important;
+}
+
+.carousel-indicators button.thumbnail:hover {
+  transform: translateY(-5px);
+}
+
+.card-fasilitas p::before {
+  content: "";
+  height: 20px;
+  width: 1px;
+  right: 10;
+  background: #d40017;
+  position: absolute;
+}
+
+.gambarnaik .card {
+  cursor: pointer;
+  transition: 0.55s;
+}
+
+.gambarnaik .card:hover {
+  transform: scale(1.05);
+}
+
+@media screen and (max-width: 600px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .mobile {
+    padding-top: 0px !important;
+    margin-top: 0px !important;
+  }
+  .tom {
+    padding-bottom: 0px !important ;
+  }
+
+  .main-merah {
+    margin-top: 100px !important;
+  }
+
+  .gambarnaik {
+    position: relative !important;
+  }
+  .gambarnaik .card {
+    margin: auto !important;
+  }
+
+  .carousel-indicators {
+    width: 100%;
+    margin: auto;
+  }
+
+  nav .dropdown-menu-kategori {
+    display: none !important;
+  }
+}
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 55px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 2);
+  background-color: #ff0707;
+  overflow-x: auto;
+  display: flex;
+}
+
+.nav-link {
+  min-width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #444;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.test .hoverdisini:hover {
+  color: #807e7e !important;
+}
+
+@media (min-width: 992px) {
+}
+
+@media (max-width: 991px) {
+  .nav-item.dropdown:hover .dropdown-menu-kategori {
+    display: block !important;
+  }
+}

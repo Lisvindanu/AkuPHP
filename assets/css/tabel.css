@@ -1,0 +1,130 @@
+/* Styling for mobile devices */
+@media only screen and (max-width: 767px) {
+  .admin .container {
+    padding-top: 30px !important;
+  }
+
+  .admin .table-responsive {
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin table {
+    min-width: 600px;
+  }
+
+  .admin .table-responsive {
+    max-height: 60vh; /* Menentukan tinggi maksimum untuk tabel */
+    overflow-y: auto; /* Membuat tabel bisa di-scroll jika melebihi tinggi maksimum */
+  }
+
+  form.cari input {
+    width: 90px !important;
+  }
+}
+
+/* Styling for tablets */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .admin .container {
+    padding-top: 40px !important;
+  }
+}
+
+/* Styling for small desktops */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .admin .container {
+    padding-top: 50px !important;
+  }
+}
+
+/* Styling for larger desktops */
+@media only screen and (min-width: 1200px) {
+  .admin .container {
+    padding-top: 60px !important;
+  }
+}
+
+/* Warna dasar */
+body {
+  background-color: #f4f4f4;
+  color: #333;
+  font-family: Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Gaya khusus untuk section dengan class "admin" dan "mobile" */
+section.admin.mobile {
+  margin-top: 30px !important;
+}
+
+/* Gaya khusus untuk class "container" dengan class "py-2", "mobile", dan "tom" */
+.container.py-2.mobile.tom {
+  padding-top: 60px !important;
+}
+
+/* Gaya khusus untuk class "tambah" dengan class "py-2" */
+.tambah.py-2 {
+  text-align: center;
+}
+
+/* Gaya khusus untuk class "cari" */
+.cari {
+  text-align: center;
+}
+
+/* Gaya khusus untuk class "btn" dengan class "btn-outline-danger" dan "px-3" */
+.btn.btn-outline-danger.px-3 {
+  font-weight: bold;
+}
+
+/* Gaya khusus untuk class "btn" dengan class "btn-outline-primary" */
+.btn.btn-outline-primary {
+  font-weight: bold;
+}
+
+/* Gaya khusus untuk class "table-responsive" */
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* Gaya khusus untuk class "table" dan "table-bordered" */
+.table.table-bordered {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+
+/* Gaya khusus untuk tag "p" */
+p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* Gaya khusus untuk tag "thead" */
+thead {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Gaya khusus untuk tag "th" */
+th {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Gaya khusus untuk tag "td" */
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* Gaya khusus untuk tag "a" */
+a {
+  color: #333;
+  text-decoration: none;
+}
+
+/* Gaya khusus untuk tag "a:hover" */
+a:hover {
+  text-decoration: underline;
+}

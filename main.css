@@ -1,0 +1,179 @@
+html,
+body {
+  overflow-x: hidden !important;
+}
+
+/* header hero */
+
+.geser2 {
+  overflow: hidden;
+}
+
+/* sale */
+section#sale {
+  text-align: center;
+}
+
+/* header hero responsive hp */
+
+/* .header-text {
+  margin-top: 400px !important;
+} */
+
+@media (max-width: 600px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+  section#headerhero {
+    position: relative;
+    background: url(../Tubes/assets/img/rrq\ x\ 3second.jpg) !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-color: #e6e3da !important;
+  }
+
+  .geser {
+    margin-left: -50px !important;
+  }
+
+  .header-text {
+    position: absolute;
+    margin-top: 460px !important ;
+    padding-inline-start: 25%;
+  }
+
+  .p-1 {
+    width: 20rem !important;
+    margin: 0 auto !important;
+  }
+
+  .cobatengah {
+    padding-left: 40px !important;
+  }
+}
+/* tablet */
+@media (max-width: 768px) {
+  .regis {
+    text-align: center !important;
+    display: block !important;
+  }
+
+  .putinput {
+    margin: auto !important;
+  }
+  .tombol12 {
+    margin: auto !important;
+    align-items: center !important;
+    width: auto !important;
+    height: auto !important;
+  }
+}
+
+i {
+  color: rgb(255, 0, 0) !important;
+}
+/* header hero end */
+
+.tombol {
+  position: absolute;
+  top: 70%;
+  left: 30%;
+}
+.tombol1 {
+  background-color: black !important;
+  right: 0;
+  padding: 2px !important;
+  padding: 8px 25px !important;
+  border-radius: 0 !important;
+  /* box-shadow: 7px 9px 1px rgba(255, 255, 255, 0.301) !important; */
+}
+
+.tombol::before {
+  border-bottom: 1px solid #000 !important;
+  border-left: 1px solid #000 !important;
+  bottom: -3px !important;
+  height: 3px !important;
+  left: 3px !important;
+  width: 100% !important;
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  transition: 0.1s !important;
+}
+
+.tombol::after {
+  border-right: 1px solid #000 !important;
+  border-top: 1px solid #000 !important;
+  height: 100% !important;
+  right: -3px !important;
+  top: 1px !important;
+  width: 3px !important;
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  transition: 0.1s !important;
+}
+
+.tombol1:hover {
+  color: rgb(255, 0, 0) !important;
+  background-color: rgba(255, 255, 255, 0.174) !important;
+}
+
+#About1 {
+  background-color: #ebedee !important;
+}
+
+#About1 p {
+  font-size: 15px !important;
+  text-align: justify;
+}
+
+#About1 p.abotakhir {
+  padding-top: 34.2px !important;
+}
+
+form {
+  margin-left: 60px !important;
+}
+
+p.privasykanan {
+  margin-left: auto !important;
+}
+
+.carousel-indicators button.thumbnail {
+  width: 200px;
+  transition: all 0.55s ease;
+  position: relative;
+}
+
+.carousel-indicators button.thumbnail:not(.active) {
+  opacity: 0.5;
+}
+
+.carousel-indicators {
+  position: static;
+  left: 0;
+}
+
+.carousel-fluid .carousel-inner {
+  max-height: 70vh;
+}
+
+.slideraje {
+  background-color: white;
+}
+
+.switchpromote {
+  padding-top: 20px;
+  background-color: white;
+}
+
+* {
+  overflow-x: visible;
+}
+
+div.item {
+  background-color: aqua;
+}
